@@ -84,8 +84,10 @@ BrowserWindow::BrowserWindow(Browser *browser, QWebEngineProfile *profile)
 
 QSize BrowserWindow::sizeHint() const
 {
-    QRect desktopRect = QApplication::desktop()->screenGeometry();
-    QSize size = desktopRect.size() * qreal(0.9);
+    int current_screen = QApplication::desktop()->screenNumber(this);
+    QRect desktopRect = QApplication::desktop()->screenGeometry(current_screen);
+    //QRect desktopRect = QApplication::desktop()->screenGeometry();
+    QSize size = desktopRect.size();// * qreal(0.9);
     return size;
 }
 
