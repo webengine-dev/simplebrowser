@@ -16,7 +16,7 @@ public:
     void updateMaximize();
 
 protected:
-    //void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 protected slots:
     void onClicked();

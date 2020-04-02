@@ -10,39 +10,43 @@ TitleButtonGroup::TitleButtonGroup(QMainWindow *mainWindow, QWidget *parent)
       m_mainWindow(mainWindow)
 {
     m_minimizeButton = new QPushButton(this);
-    m_minimizeButton->setFixedSize(TITLE_BUTTON_WIDTH, TITLE_HEIGHT-1);
+    m_minimizeButton->setFixedSize(TITLE_BUTTON_WIDTH, 20);
     m_minimizeButton->setObjectName("minimizeButton");
     m_minimizeButton->setStyleSheet("QPushButton{border-image:url(:/images/app_window_minimize.png);}"
                                   "QPushButton:hover{border-image:url(:/images/app_window_minimize_hover.png);}"
                                   "QPushButton:pressed{border-image:url(:/images/app_window_minimize_active.png);}");
 
     m_maximizeButton = new QPushButton(this);
-    m_maximizeButton->setFixedSize(TITLE_BUTTON_WIDTH, TITLE_HEIGHT-1);
+    m_maximizeButton->setFixedSize(TITLE_BUTTON_WIDTH, 20);
     m_maximizeButton->setObjectName("maximizeButton");
     m_maximizeButton->setStyleSheet("QPushButton{border-image:url(:/images/app_window_maximize.png);}"
                                   "QPushButton:hover{border-image:url(:/images/app_window_maximize_hover.png);}"
                                   "QPushButton:pressed{border-image:url(:/images/app_window_maximize_active.png);}");
 
     m_closeButton = new QPushButton(this);
-    m_closeButton->setFixedSize(TITLE_BUTTON_WIDTH, TITLE_HEIGHT-1);
+    m_closeButton->setFixedSize(TITLE_BUTTON_WIDTH, 20);
     m_closeButton->setObjectName("closeButton");
     m_closeButton->setStyleSheet("QPushButton{border-image:url(:/images/app_window_close.png);}"
                                   "QPushButton:hover{border-image:url(:/images/app_window_close_hover.png);}"
                                   "QPushButton:pressed{border-image:url(:/images/app_window_close_active.png);}");
 
-    QHBoxLayout* layout = new QHBoxLayout;
+    QVBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
-    layout->setSpacing(0);
+    QHBoxLayout* hLayout = new QHBoxLayout;
+    layout->addLayout(hLayout);
+    layout->addStretch(1);
+    hLayout->setMargin(0);
+    hLayout->setSpacing(0);
 #ifdef Q_OS_WIN
-    layout->addStretch(1);
-    layout->addWidget(m_minimizeButton);
-    layout->addWidget(m_maximizeButton);
-    layout->addWidget(m_closeButton);
+    hLayout->addStretch(1);
+    hLayout->addWidget(m_minimizeButton);
+    hLayout->addWidget(m_maximizeButton);
+    hLayout->addWidget(m_closeButton);
 #else
-    layout->addWidget(m_closeButton);
-    layout->addWidget(m_minimizeButton);
-    layout->addWidget(m_maximizeButton);
-    layout->addStretch(1);
+    hLayout->addWidget(m_closeButton);
+    hLayout->addWidget(m_minimizeButton);
+    hLayout->addWidget(m_maximizeButton);
+    hLayout->addStretch(1);
 #endif
     setLayout(layout);
 
@@ -51,6 +55,7 @@ TitleButtonGroup::TitleButtonGroup(QMainWindow *mainWindow, QWidget *parent)
     connect(m_closeButton, SIGNAL(clicked(bool)), this, SLOT(onClicked()));
 
     mainWindow->installEventFilter(this);
+    setAttribute(Qt::WA_TranslucentBackground, true);
 }
 
 bool TitleButtonGroup::eventFilter(QObject *obj, QEvent *event)
@@ -115,10 +120,10 @@ void TitleButtonGroup::onClicked()
     }
 }
 
-//void TitleButtonGroup::paintEvent(QPaintEvent *event)
-//{
-//    QPainter painter(this);
-//    painter.setPen(QColor(139, 139, 139));
-//    painter.drawLine(0, this->height() - 1, this->width() - 1, this->height() - 1);
-//    QWidget::paintEvent(event);
-//}
+void TitleButtonGroup::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setPen(QColor(139, 139, 139));
+    painter.drawLine(0, this->height() - 3, this->width() - 1, this->height() - 3);
+    QWidget::paintEvent(event);
+}
