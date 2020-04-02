@@ -16,7 +16,9 @@ public:
     void updateMaximize();
 
 protected:
+#ifdef Q_OS_WIN
     void paintEvent(QPaintEvent *event) override;
+#endif
 
 protected slots:
     void onClicked();

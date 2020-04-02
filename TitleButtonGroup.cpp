@@ -120,6 +120,7 @@ void TitleButtonGroup::onClicked()
     }
 }
 
+#ifdef Q_OS_WIN
 void TitleButtonGroup::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
@@ -127,3 +128,4 @@ void TitleButtonGroup::paintEvent(QPaintEvent *event)
     painter.drawLine(0, this->height() - 3, this->width() - 1, this->height() - 3);
     QWidget::paintEvent(event);
 }
+#endif
