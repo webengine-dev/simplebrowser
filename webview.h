@@ -54,7 +54,7 @@
 #include <QIcon>
 #include <QWebEngineView>
 
-class WebPage;
+typedef QWebEnginePage WebPage;
 
 class WebView : public QWebEngineView
 {

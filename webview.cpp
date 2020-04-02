@@ -51,7 +51,6 @@
 #include "browser.h"
 #include "browserwindow.h"
 #include "tabwidget.h"
-#include "webpage.h"
 #include "webpopupwindow.h"
 #include "webview.h"
 #include <QContextMenuEvent>
@@ -165,11 +164,11 @@ QWebEngineView *WebView::createWindow(QWebEnginePage::WebWindowType type)
     case QWebEnginePage::WebBrowserWindow: {
         return mainWindow->browser()->createWindow()->currentTab();
     }
-    case QWebEnginePage::WebDialog: {
-        WebPopupWindow *popup = new WebPopupWindow(page()->profile());
-        connect(popup->view(), &WebView::devToolsRequested, this, &WebView::devToolsRequested);
-        return popup->view();
-    }
+//    case QWebEnginePage::WebDialog: {
+//        WebPopupWindow *popup = new WebPopupWindow(page()->profile());
+//        connect(popup->view(), &WebView::devToolsRequested, this, &WebView::devToolsRequested);
+//        return popup->view();
+//    }
     }
     return nullptr;
 }

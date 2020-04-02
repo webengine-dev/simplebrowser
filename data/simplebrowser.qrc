@@ -2,8 +2,6 @@
     <qresource prefix="/">
         <file>AppLogoColor.png</file>
         <file>ninja.png</file>
-    </qresource>
-    <qresource prefix="/">
         <file alias="dialog-error.png">3rdparty/dialog-error.png</file>
         <file alias="edit-clear.png">3rdparty/edit-clear.png</file>
         <file alias="go-bottom.png">3rdparty/go-bottom.png</file>
@@ -11,6 +9,17 @@
         <file alias="go-previous.png">3rdparty/go-previous.png</file>
         <file alias="process-stop.png">3rdparty/process-stop.png</file>
         <file alias="text-html.png">3rdparty/text-html.png</file>
-        <file alias="view-refresh.png">3rdparty/view-refresh.png</file>
+        <file>images/app_window_minimize.png</file>
+        <file>images/app_window_minimize_active.png</file>
+        <file>images/app_window_minimize_hover.png</file>
+        <file>images/app_window_close.png</file>
+        <file>images/app_window_close_active.png</file>
+        <file>images/app_window_close_hover.png</file>
+        <file>images/app_window_maximize.png</file>
+        <file>images/app_window_maximize_active.png</file>
+        <file>images/app_window_maximize_hover.png</file>
+        <file>images/app_window_restore.png</file>
+        <file>images/app_window_restore_active.png</file>
+        <file>images/app_window_restore_hover.png</file>
     </qresource>
 </RCC>

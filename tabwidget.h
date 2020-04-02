@@ -53,31 +53,24 @@
 
 #include <QTabWidget>
 #include <QWebEnginePage>
+#include <QWebEngineView>
+#include "webview.h"
+#include "TitleButtonGrouproup.h"
 
-QT_BEGIN_NAMESPACE
-class QUrl;
-QT_END_NAMESPACE
-
-class WebView;
+typedef QWebEnginePage WebPage;
 
 class TabWidget : public QTabWidget
 {
     Q_OBJECT
 
 public:
-    TabWidget(QWebEngineProfile *profile, QWidget *parent = nullptr);
+    TabWidget(QMainWindow *mainWindow, QWebEngineProfile *profile, QWidget *parent = nullptr);
 
     WebView *currentWebView() const;
 
 signals:
     // current tab/page signals
-    void linkHovered(const QString &link);
-    void loadProgress(int progress);
     void titleChanged(const QString &title);
-    void urlChanged(const QUrl &url);
-    void favIconChanged(const QIcon &icon);
-    void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
-    void devToolsRequested(QWebEnginePage *source);
 
 public slots:
     // current tab/page slots
@@ -87,22 +80,20 @@ public slots:
     WebView *createTab();
     WebView *createBackgroundTab();
     void closeTab(int index);
-    void nextTab();
-    void previousTab();
 
 private slots:
-    void handleCurrentChanged(int index);
-    void handleContextMenuRequested(const QPoint &pos);
-    void cloneTab(int index);
-    void closeOtherTabs(int index);
-    void reloadAllTabs();
     void reloadTab(int index);
+
+protected:
+    void resizeEvent(QResizeEvent *) override;
 
 private:
     WebView *webView(int index) const;
     void setupView(WebView *webView);
 
     QWebEngineProfile *m_profile;
+
+    TitleButtonGroup *m_titleButtonGroup = nullptr;
 };
 
 #endif // TABWIDGET_H

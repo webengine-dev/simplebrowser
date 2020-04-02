@@ -53,19 +53,78 @@
 #include "tabwidget.h"
 #include <QApplication>
 #include <QWebEngineSettings>
+#include <QMutex>
+#include <QCoreApplication>
+#include <QFile>
+#include <QDir>
+#include <QTextCodec>
+#include "Settings.h"
+#ifdef Q_OS_WIN
+#include "helper.h"
+#endif
 
-QUrl commandLineUrlArgument()
+extern "C" void outputMessage(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    const QStringList args = QCoreApplication::arguments();
-    for (const QString &arg : args.mid(1)) {
-        if (!arg.startsWith(QLatin1Char('-')))
-            return QUrl::fromUserInput(arg);
+    static QMutex mutex;
+    mutex.lock();
+
+    QString text;
+    switch(type)
+    {
+    case QtDebugMsg:
+        text = QString("Debug:");
+        break;
+
+    case QtWarningMsg:
+        text = QString("Warning:");
+        break;
+
+    case QtCriticalMsg:
+        text = QString("Critical:");
+        break;
+
+    case QtFatalMsg:
+        text = QString("Fatal:");
     }
-    return QUrl(QStringLiteral("http://iteach-jiaoyan.test.xdf.cn"));
+    /* The QMessageLogContext class provides additional information about a log message.
+    The class provides information about the source code location a qDebug(), qInfo(), qWarning(), qCritical() or qFatal() message was generated.
+    Note: By default, this information is recorded only in debug builds. You can overwrite this explicitly by defining QT_MESSAGELOGCONTEXT or QT_NO_MESSAGELOGCONTEXT
+    */
+    QString context_info = QString("File:(%1) Line:(%2)").arg(QString(context.file)).arg(context.line);
+    QString current_date_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
+    QString current_date = QString("(%1)").arg(current_date_time);
+    QString message = QString("%1 %2 %3 %4").arg(text).arg(context_info).arg(current_date).arg(msg);
+
+    QDir dirLog = QCoreApplication::applicationDirPath();
+#ifdef Q_OS_MACOS
+    dirLog.cdUp();
+#endif
+    dirLog.cdUp();
+    QString strLogPath = dirLog.absolutePath() + QString("/log");
+    if(!dirLog.exists(strLogPath))
+    {
+        dirLog.mkdir(strLogPath);
+    }
+    dirLog.cd("log");
+    QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd");
+    QString strLogFile = dirLog.absoluteFilePath(QString("log_")+currentTime+QString(".txt"));
+    QFile file(strLogFile);
+    file.open(QIODevice::WriteOnly| QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream text_stream(&file);
+    text_stream.setCodec("utf-8");
+    text_stream << message << "\r\n";
+    file.flush();
+    file.close();
+
+    mutex.unlock();
 }
 
 int main(int argc, char **argv)
 {
+#ifdef Q_OS_WIN
+    SetUnhandledExceptionFilter(ExceptionFilter);
+#endif
+
     QCoreApplication::setOrganizationName("教研平台");
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -73,9 +132,14 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(QStringLiteral(":AppLogoColor.png")));
 
+    QTextCodec *codec = QTextCodec::codecForName("GBK");
+    QTextCodec::setCodecForLocale(codec);
+
+    qInstallMessageHandler(outputMessage);
+
     QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
 
-    QUrl url = commandLineUrlArgument();
+    QUrl url = QUrl(Settings::getInstance()->getMainPage());
 
     Browser browser;
     BrowserWindow *window = browser.createWindow();

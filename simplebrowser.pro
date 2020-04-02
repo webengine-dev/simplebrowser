@@ -2,35 +2,37 @@ TEMPLATE = app
 TARGET = simplebrowser
 QT += webenginewidgets
 
+DESTDIR = ../bin
+
 HEADERS += \
     browser.h \
     browserwindow.h \
-    downloadmanagerwidget.h \
-    downloadwidget.h \
     tabwidget.h \
-    webpage.h \
-    webpopupwindow.h \
-    webview.h
+    singlecase.h \
+    helper.h \
+    webview.h \
+    Settings.h \
+    DragTabBar.h \
+    FramelessMainWindow.h \
+    TitleButtonGrouproup.h \
+    Defs.h
 
 SOURCES += \
     browser.cpp \
     browserwindow.cpp \
-    downloadmanagerwidget.cpp \
-    downloadwidget.cpp \
     main.cpp \
     tabwidget.cpp \
-    webpage.cpp \
-    webpopupwindow.cpp \
-    webview.cpp
+    webview.cpp \
+    Settings.cpp \
+    DragTabBar.cpp \
+    FramelessMainWindow.cpp \
+    TitleButtonGroup.cpp
 
 FORMS += \
-    certificateerrordialog.ui \
-    passworddialog.ui \
-    downloadmanagerwidget.ui \
-    downloadwidget.ui
 
 RESOURCES += data/simplebrowser.qrc
+RC_ICONS = app.ico
 
 # install
-target.path = $$[QT_INSTALL_EXAMPLES]/webenginewidgets/simplebrowser
-INSTALLS += target
+#target.path = $$[QT_INSTALL_EXAMPLES]/webenginewidgets/simplebrowser
+#INSTALLS += target
