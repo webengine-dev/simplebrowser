@@ -137,7 +137,18 @@ int main(int argc, char **argv)
 
     qInstallMessageHandler(outputMessage);
 
-    QWebEngineSettings::defaultSettings()->setAttribute(QWebEngineSettings::PluginsEnabled, true);
+    QWebEngineSettings* setting = QWebEngineSettings::defaultSettings();
+    setting->setAttribute(QWebEngineSettings::PluginsEnabled, true);
+    setting->setAttribute(QWebEngineSettings::AutoLoadImages, true);
+    setting->setAttribute(QWebEngineSettings::JavascriptEnabled, true);
+    setting->setAttribute(QWebEngineSettings::JavascriptCanOpenWindows, true);
+    setting->setAttribute(QWebEngineSettings::JavascriptCanAccessClipboard, true);
+    setting->setAttribute(QWebEngineSettings::LinksIncludedInFocusChain, true);
+    setting->setAttribute(QWebEngineSettings::LocalStorageEnabled, true);
+    setting->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls, true);
+    setting->setAttribute(QWebEngineSettings::Accelerated2dCanvasEnabled, true);
+    setting->setAttribute(QWebEngineSettings::WebGLEnabled,true);
+    QWebEngineProfile::defaultProfile()->setPersistentCookiesPolicy(QWebEngineProfile::ForcePersistentCookies);
 
     QUrl url = QUrl(Settings::getInstance()->getMainPage());
 
