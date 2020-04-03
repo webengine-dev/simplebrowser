@@ -130,7 +130,11 @@ int main(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     QApplication app(argc, argv);
-    app.setWindowIcon(QIcon(QStringLiteral(":AppLogoColor.png")));
+#ifdef Q_OS_WIN
+    app.setWindowIcon(QIcon("win_app.ico"));
+#else
+    app.setWindowIcon(QIcon("mac_app.icns"));
+#endif
 
     QTextCodec *codec = QTextCodec::codecForName("GBK");
     QTextCodec::setCodecForLocale(codec);

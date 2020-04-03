@@ -31,7 +31,13 @@ SOURCES += \
 FORMS += \
 
 RESOURCES += data/simplebrowser.qrc
-RC_ICONS = app.ico
+win32 {
+    RC_ICONS = win_app.ico
+}
+
+macx{
+    ICON = mac_app.icns
+}
 
 # install
 #target.path = $$[QT_INSTALL_EXAMPLES]/webenginewidgets/simplebrowser
