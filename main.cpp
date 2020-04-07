@@ -139,7 +139,9 @@ int main(int argc, char **argv)
     QTextCodec *codec = QTextCodec::codecForName("GBK");
     QTextCodec::setCodecForLocale(codec);
 
+#ifdef QT_NO_DEBUG
     qInstallMessageHandler(outputMessage);
+#endif
 
     QWebEngineSettings* setting = QWebEngineSettings::defaultSettings();
     setting->setAttribute(QWebEngineSettings::PluginsEnabled, true);

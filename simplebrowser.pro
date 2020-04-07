@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = simplebrowser
+TARGET = TeachResearchPlatform
 QT += webenginewidgets
 
 DESTDIR = ../bin

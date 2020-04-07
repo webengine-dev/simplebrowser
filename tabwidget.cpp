@@ -97,12 +97,27 @@ void TabWidget::setupView(WebView *webView)
 {
     connect(webView, &QWebEngineView::titleChanged, [this, webView](const QString &title) {
         int index = indexOf(webView);
+        QString strTitle = title;
         if (index != -1) {
-            setTabText(index, title);
-            setTabToolTip(index, title);
+            if (title.indexOf("xdf.cn") != -1 || title.indexOf("about:blank") != -1
+                    || title.indexOf("通行证") != -1) {
+                strTitle = tr("教研平台");
+            }
+            setTabText(index, strTitle);
+            setTabToolTip(index, strTitle);
         }
         if (currentIndex() == index)
-            emit titleChanged(title);
+            emit titleChanged(strTitle);
+    });
+
+    connect(webView, &QWebEngineView::loadFinished, [this, webView](bool ok) {
+        int index = indexOf(webView);
+        if (index != -1) {
+            if (!ok) {
+                //webView->setContent(QString("加载失败").toUtf8(), "text/html;charset=UTF-8");
+                webView->setHtml("<body><center><div style='font-size:30px;color:red;'>请检查网络</div></center></body>");
+            }
+        }
     });
 }
 
@@ -112,11 +127,12 @@ WebView *TabWidget::createTab()
     setCurrentWidget(webView);
     return webView;
 }
-
+#include <QWebEngineSettings>
 WebView *TabWidget::createBackgroundTab()
 {
     WebView *webView = new WebView;
     WebPage *webPage = new WebPage(m_profile, webView);
+    webPage->settings()->setAttribute(QWebEngineSettings::ErrorPageEnabled, false);
     webView->setPage(webPage);
     setupView(webView);
     int index = addTab(webView, tr(""));
